@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './types'
+import { AxiosRequestConfig, AxiosPromise } from './types'
 import xhr from './xhr'
 import { buildUrl } from './helpers/url'
 import { transformRequest } from './helpers/data'
@@ -26,7 +26,7 @@ const processConfig = (config: AxiosRequestConfig): void => {
   config.data = transformRequestData(config)
 }
 
-export default (config: AxiosRequestConfig): void => {
+export default (config: AxiosRequestConfig): AxiosPromise => {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }

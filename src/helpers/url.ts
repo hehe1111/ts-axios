@@ -36,7 +36,7 @@ export function buildUrl(url: string, params?: any): string {
       } else if (isPlainObject(_v)) {
         _v = JSON.stringify(_v)
       }
-      parts.push(`${encode(k)}=${encode(_v)}}`)
+      parts.push(`${encode(k)}=${encode(_v)}`)
     })
   })
 

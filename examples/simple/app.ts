@@ -8,5 +8,3 @@ axios({
     b: 2
   }
 })
-
-console.log('simple app.ts');

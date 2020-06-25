@@ -1,4 +1,3 @@
-
 import axios from '../../src/index'
 
 // 普通对象类型的 data

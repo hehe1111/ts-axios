@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
 import { parseHeaders } from './helpers/headers'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const { url, method = 'get', data, headers, responseType } = config
     const xhr = new XMLHttpRequest()
     if (responseType) {
@@ -29,6 +29,10 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       }
 
       resolve(response)
+    }
+
+    xhr.onerror = () => {
+      reject(new Error('Network Error.'))
     }
 
     // 需要在执行过 open 方法后，才可以去处理 headers

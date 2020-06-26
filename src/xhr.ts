@@ -19,6 +19,14 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
         return
       }
 
+      if (xhr.status === 0) {
+        // 可能的场景
+        // 1. 网络错误
+        // 2. 超时
+        // ...
+        return
+      }
+
       const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
       // 注意根据 responseType 的不同，需要从不同的地方拿数据
       const responseData = responseType && responseType === 'text' ? xhr.responseText : xhr.response
@@ -31,14 +39,16 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
         request: xhr
       }
 
-      resolve(response)
+      handleResponse(response)
     }
 
     xhr.onerror = () => {
+      console.log('onerror xhr.status=', xhr.status)
       reject(new Error('Network Error.'))
     }
 
     xhr.ontimeout = () => {
+      console.log('ontimeout xhr.status=', xhr.status)
       reject(new Error(`Timeout of ${timeout}ms excceed.`))
     }
 
@@ -52,5 +62,14 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
     })
 
     xhr.send(data)
+
+    /* 工具函数 */
+    const handleResponse = (response: AxiosResponse): void => {
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response)
+      } else {
+        reject(new Error(`Request failed with status code ${response.status}`))
+      }
+    }
   })
 }

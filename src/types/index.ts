@@ -21,6 +21,7 @@ export interface AxiosRequestConfig {
   data?: any // 请求带上的数据
   headers?: any // 请求头 headers
   responseType?: XMLHttpRequestResponseType // 希望服务器返回响应的数据类型
+  timeout?: number // 超时时间
 }
 
 export interface AxiosResponse {

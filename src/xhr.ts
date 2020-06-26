@@ -3,10 +3,13 @@ import { parseHeaders } from './helpers/headers'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
   return new Promise((resolve, reject) => {
-    const { url, method = 'get', data, headers, responseType } = config
+    const { url, method = 'get', data, headers, responseType, timeout } = config
     const xhr = new XMLHttpRequest()
     if (responseType) {
       xhr.responseType = responseType
+    }
+    if (timeout) {
+      xhr.timeout = timeout
     }
 
     xhr.open(method.toUpperCase(), url)
@@ -33,6 +36,10 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
 
     xhr.onerror = () => {
       reject(new Error('Network Error.'))
+    }
+
+    xhr.ontimeout = () => {
+      reject(new Error(`Timeout of ${timeout}ms excceed.`))
     }
 
     // 需要在执行过 open 方法后，才可以去处理 headers

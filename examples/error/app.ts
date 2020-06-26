@@ -1,4 +1,4 @@
-import axios from '../../src/index'
+import axios, { AxiosError } from '../../src/index'
 
 // 访问一个不存在的路径。会返回 404 错误
 axios({
@@ -44,6 +44,11 @@ axios({
   .then(res => {
     console.log(res)
   })
-  .catch(e => {
-    console.log(e.message)
+  .catch((e: AxiosError) => {
+    console.log('e.message=', e.message)
+    console.log('e.config=', e.config)
+    console.log('e.code=', e.code)
+    console.log('e.request=', e.request)
+    console.log('e.response=', e.response)
+    console.log('e.isAxiosError=', e.isAxiosError)
   })

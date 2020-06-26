@@ -1,5 +1,6 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
 import { parseHeaders } from './helpers/headers'
+import { createError } from './helpers/error'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
   return new Promise((resolve, reject) => {
@@ -44,12 +45,12 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
 
     xhr.onerror = () => {
       console.log('onerror xhr.status=', xhr.status)
-      reject(new Error('Network Error.'))
+      reject(createError('Network Error.', config, null, xhr))
     }
 
     xhr.ontimeout = () => {
       console.log('ontimeout xhr.status=', xhr.status)
-      reject(new Error(`Timeout of ${timeout}ms excceed.`))
+      reject(createError(`Timeout of ${timeout}ms excceed.`, config, 'ECONNABORTED', xhr))
     }
 
     // 需要在执行过 open 方法后，才可以去处理 headers
@@ -68,7 +69,15 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {
-        reject(new Error(`Request failed with status code ${response.status}`))
+        reject(
+          createError(
+            `Request failed with status code ${response.status}`,
+            config,
+            null,
+            xhr,
+            response
+          )
+        )
       }
     }
   })

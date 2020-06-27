@@ -1,6 +1,6 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import { parseHeaders } from './helpers/headers'
-import { createError } from './helpers/error'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
+import { parseHeaders } from '../helpers/headers'
+import { createError } from '../helpers/error'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
   return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       xhr.timeout = timeout
     }
 
-    xhr.open(method.toUpperCase(), url)
+    xhr.open(method.toUpperCase(), url!)
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState !== 4) {

@@ -15,7 +15,7 @@ export type METHOD =
   | 'head'
 
 export interface AxiosRequestConfig {
-  url: string
+  url?: string
   method?: METHOD
   params?: any // 请求查询参数
   data?: any // 请求带上的数据
@@ -42,4 +42,21 @@ export interface AxiosError extends Error {
   code?: string | null
   request?: XMLHttpRequest
   response?: AxiosResponse
+}
+
+export interface Axios {
+  request(config: AxiosRequestConfig): AxiosPromise
+
+  get(url: string, config?: AxiosRequestConfig): AxiosPromise
+  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+  options(url: string, config?: AxiosRequestConfig): AxiosPromise
+  head(url: string, config?: AxiosRequestConfig): AxiosPromise
+
+  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+}
+
+export interface AxiosInstance extends Axios {
+  (config: AxiosRequestConfig): AxiosPromise
 }

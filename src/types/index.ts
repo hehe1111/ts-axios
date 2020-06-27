@@ -1,4 +1,4 @@
-export type METHODS =
+export type METHOD =
   | 'GET'
   | 'get'
   | 'POST'
@@ -16,7 +16,7 @@ export type METHODS =
 
 export interface AxiosRequestConfig {
   url: string
-  method?: METHODS
+  method?: METHOD
   params?: any // 请求查询参数
   data?: any // 请求带上的数据
   headers?: any // 请求头 headers

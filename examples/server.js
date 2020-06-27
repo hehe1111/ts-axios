@@ -31,6 +31,7 @@ registerSimpleRoutes()
 registerBaseRoutes()
 registerErrorRoutes()
 registerExtendRoutes()
+registerInterceptorRoutes()
 
 app.use(router)
 
@@ -128,5 +129,11 @@ function registerExtendRoutes() {
       name: 'Jack',
       age: 18
     })
+  })
+}
+
+function registerInterceptorRoutes() {
+  router.get('/interceptor/get', function(req, res) {
+    res.end('interceptor/get')
   })
 }

@@ -45,6 +45,11 @@ export interface AxiosError extends Error {
 }
 
 export interface Axios {
+  interceptors: {
+    request: InterceptorManager<AxiosRequestConfig>
+    response: InterceptorManager<AxiosResponse>
+  }
+
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
@@ -60,4 +65,22 @@ export interface Axios {
 export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+
+export interface ResolvedFn<T = any> {
+  // 返回的类型中
+  // T 是给请求拦截器用的(config)
+  // Promise<T> 是给响应拦截器用的(response)
+  (value: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+  (error: any): any
+}
+
+export interface InterceptorManager<T> {
+  // 添加拦截器
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+  // 取消拦截器
+  eject(id: number): void
 }

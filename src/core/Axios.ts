@@ -2,7 +2,14 @@ import { AxiosRequestConfig, AxiosPromise, METHOD } from '../types'
 import dispatchRequest from './dispatchRequest'
 
 export default class Axios {
-  request(config: AxiosRequestConfig): AxiosPromise {
+  request(url: string | AxiosRequestConfig, config?: AxiosRequestConfig): AxiosPromise {
+    if (typeof url === 'string') {
+      !config && (config = {})
+      config.url = url
+    } else {
+      config = url
+    }
+
     return dispatchRequest(config)
   }
 
@@ -42,7 +49,6 @@ export default class Axios {
   head(url: string, config?: AxiosRequestConfig): AxiosPromise {
     return this._requestWithoutData('head', url, config)
   }
-
 
   post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise {
     return this._requestWithData('post', url, data, config)

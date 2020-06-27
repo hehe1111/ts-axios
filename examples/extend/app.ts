@@ -26,3 +26,17 @@ axios.head('/extend/head').then(res => console.log(res))
 axios.post('/extend/post', { msg: 'post' }).then(res => console.dir(res))
 axios.put('/extend/put', { msg: 'put' }).then(res => console.dir(res))
 axios.patch('/extend/patch', { msg: 'patch' }).then(res => console.dir(res))
+
+axios({
+  url: '/extend/post',
+  method: 'post',
+  data: {
+    msg: 'override 1'
+  }
+})
+axios('/extend/post', {
+  method: 'post',
+  data: {
+    msg: 'override 2'
+  }
+})

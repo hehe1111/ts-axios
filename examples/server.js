@@ -126,8 +126,10 @@ function registerExtendRoutes() {
 
   router.get('/extend/user', function(req, res) {
     res.json({
-      name: 'Jack',
-      age: 18
+      result: {
+        name: 'Jack',
+        age: 18
+      }
     })
   })
 }

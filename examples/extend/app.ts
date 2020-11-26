@@ -44,8 +44,6 @@ axios('/extend/post', {
 
 // 响应数据支持泛型
 interface ResponseData<T = any> {
-  code: number
-  message: string
   result: T
 }
 
@@ -62,6 +60,7 @@ function getUser<T>() {
 
 async function test() {
   const user = await getUser<User>()
+  console.log(user)
   if (user) {
     console.log(user.result.name)
   }

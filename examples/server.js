@@ -136,6 +136,6 @@ function registerExtendRoutes() {
 
 function registerInterceptorRoutes() {
   router.get('/interceptor/get', function(req, res) {
-    res.end('interceptor/get')
+    res.end(req.path)
   })
 }

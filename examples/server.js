@@ -32,6 +32,7 @@ registerBaseRoutes()
 registerErrorRoutes()
 registerExtendRoutes()
 registerInterceptorRoutes()
+registerConfigRoutes()
 
 app.use(router)
 
@@ -137,5 +138,11 @@ function registerExtendRoutes() {
 function registerInterceptorRoutes() {
   router.get('/interceptor/get', function(req, res) {
     res.end(req.path)
+  })
+}
+
+function registerConfigRoutes() {
+  router.post('/config/post', function(req, res) {
+    res.json(req.body)
   })
 }

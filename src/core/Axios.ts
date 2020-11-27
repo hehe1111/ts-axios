@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
@@ -20,9 +21,11 @@ interface PromiseChain {
 }
 
 export default class Axios {
+  defaults: AxiosRequestConfig
   interceptors: Interceptors
 
-  constructor() {
+  constructor(defalutsConfig: AxiosRequestConfig) {
+    this.defaults = defalutsConfig
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
@@ -37,6 +40,10 @@ export default class Axios {
       config = url
     }
 
+    config = mergeConfig(this.defaults, config)
+
+    /* === 拦截器相关 === */
+
     const chain: PromiseChain[] = [
       {
         // 发请求
@@ -44,7 +51,6 @@ export default class Axios {
         rejected: undefined
       }
     ]
-
     // 将用户添加的请求拦截器加到数组中，等待执行
     // 请求拦截器是先添加的后执行，因此用 unshift
     this.interceptors.request.forEach(interceptor => {
@@ -55,10 +61,8 @@ export default class Axios {
     this.interceptors.response.forEach(interceptor => {
       chain.push(interceptor)
     })
-
     // 开始执行请求拦截器之前，需要传入 config 对象
     let promise = Promise.resolve(config)
-
     // 开始从前往后遍历数组，执行其中拦截器并且发请求并拿到响应
     // 顺序：
     // 请求拦截器n -> ... -> 请求拦截器1 -> 发请求并拿到响应 -> 响应拦截器1 -> ... -> 响应拦截器n

@@ -23,6 +23,12 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType // 希望服务器返回响应的数据类型
   timeout?: number // 超时时间
   [key: string]: any
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }
 
 export interface AxiosResponse<T = any> {

@@ -13,7 +13,7 @@ export const normalizeHeaders = (headers: any, normalizedName: string) => {
   })
 }
 
-export const processHeaders = (headers: any, data: any): any => {
+export const contentTypeJson = (headers: any, data: any): any => {
   // 请求 header 属性是大小写不敏感的，故需要预先处理一下
   normalizeHeaders(headers, 'Content-Type')
 

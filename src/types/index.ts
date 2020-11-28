@@ -25,10 +25,48 @@ export interface AxiosRequestConfig {
   [key: string]: any
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
 }
 
 export interface AxiosTransformer {
   (data: any, headers?: any): any
+}
+
+// Cancel 类的实例类型
+export interface Cancel {
+  message?: string
+}
+
+// Cancel 类的类类型
+export interface CancelStatic {
+  new (message?: string): Cancel
+}
+
+// CancelToken 类的实例类型
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  throwIfRequested(): void
+}
+
+export interface Canceler {
+  (message?: string): void
+}
+
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+// CancelToken 类的类类型
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
 }
 
 export interface AxiosResponse<T = any> {
@@ -77,6 +115,10 @@ export interface AxiosInstance extends Axios {
 
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
 }
 
 export interface ResolvedFn<T = any> {

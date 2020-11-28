@@ -33,6 +33,7 @@ registerErrorRoutes()
 registerExtendRoutes()
 registerInterceptorRoutes()
 registerConfigRoutes()
+registerCancelRoutes()
 
 app.use(router)
 
@@ -143,6 +144,15 @@ function registerInterceptorRoutes() {
 
 function registerConfigRoutes() {
   router.post('/config/post', function(req, res) {
+    res.json(req.body)
+  })
+}
+
+function registerCancelRoutes() {
+  router.get('/cancel/get', function(req, res) {
+    res.end(req.path)
+  })
+  router.post('/cancel/post', function(req, res) {
     res.json(req.body)
   })
 }

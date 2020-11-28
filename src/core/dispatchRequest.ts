@@ -21,6 +21,13 @@ const _transformResponseData = (res: AxiosResponse): AxiosResponse => {
 }
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
+  throwIfCancellationRequested(config)
   processConfig(config)
   return xhr(config).then(res => _transformResponseData(res))
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }

@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -22,6 +23,7 @@ app.use(webpackHotMiddleware(compiler))
 app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 const router = express.Router()
 registerSimpleRoutes()
@@ -31,6 +33,7 @@ registerExtendRoutes()
 registerInterceptorRoutes()
 registerConfigRoutes()
 registerCancelRoutes()
+registerMoreRoutes()
 app.use(router)
 
 const port = process.env.PORT || 3000
@@ -94,4 +97,8 @@ function registerConfigRoutes() {
 function registerCancelRoutes() {
   router.get('/cancel/get', (req, res) => res.end(req.path))
   router.post('/cancel/post', (req, res) => res.json(req.body))
+}
+
+function registerMoreRoutes() {
+  router.get('/more/get', (req, res) => res.json(req.cookies))
 }

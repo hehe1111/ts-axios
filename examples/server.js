@@ -7,8 +7,9 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
 
 const app = express()
-const compiler = webpack(WebpackConfig)
 
+// 静态资源服务器相关
+const compiler = webpack(WebpackConfig)
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: '/__build__/',
@@ -18,9 +19,10 @@ app.use(
     }
   })
 )
-
 app.use(webpackHotMiddleware(compiler))
 app.use(express.static(__dirname))
+
+// api 服务器相关
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -41,7 +43,8 @@ module.exports = app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}, Ctrl+C to stop`)
 })
 
-/* 工具函数：注册路由 */
+/* === 工具函数：注册路由 === */
+
 function registerSimpleRoutes() {
   router.get('/simple/get', (req, res) => res.json({ msg: 'hello world' }))
 }

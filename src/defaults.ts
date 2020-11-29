@@ -19,7 +19,9 @@ const defaults: AxiosRequestConfig = {
       return stringifyData(data)
     }
   ],
-  transformResponse: [(data: any): any => parseData(data)]
+  transformResponse: [(data: any): any => parseData(data)],
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN'
 }
 
 const methodsNoData = ['get', 'head', 'options', 'delete']

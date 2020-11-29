@@ -20,7 +20,14 @@ app.use(
   })
 )
 app.use(webpackHotMiddleware(compiler))
-app.use(express.static(__dirname))
+app.use(
+  express.static(__dirname, {
+    setHeaders(res) {
+      // 在访问页面的时候，服务端通过 set-cookie 往客户端种了 key 为 XSRF-TOKEN-D，值为 1234abc 的 cookie，作为 xsrf 的 token 值
+      res.cookie('XSRF-TOKEN-D', '1234abc')
+    }
+  })
+)
 
 // api 服务器相关
 app.use(bodyParser.json())

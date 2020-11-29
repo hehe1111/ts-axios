@@ -52,3 +52,28 @@ export function buildUrl(url: string, params?: any): string {
 
   return url
 }
+
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+const currentOrigin = resolveURL(window.location.href)
+
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
+  )
+}
+
+function resolveURL(url: string): URLOrigin {
+  // [Javascript: document.createElement('') & delete DOMElement](https://stackoverflow.com/a/1847289/14449377)
+  // 创建一个 a 标签的 DOM，然后设置 href 属性为传入的 url，然后可以获取该 DOM 的 protocol、host
+  let urlParsingNode: HTMLAnchorElement | null = document.createElement('a')
+  urlParsingNode.setAttribute('href', url)
+  const { protocol, host } = urlParsingNode
+  urlParsingNode = null
+
+  return { protocol, host }
+}

@@ -6,7 +6,7 @@ import {
   ResolvedFn,
   RejectedFn
 } from '../types'
-import dispatchRequest from './dispatchRequest'
+import dispatchRequest, { transformUrl } from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
 import mergeConfig from './mergeConfig'
 
@@ -44,13 +44,8 @@ export default class Axios {
 
     /* === 拦截器相关 === */
 
-    const chain: PromiseChain[] = [
-      {
-        // 发请求
-        resolved: dispatchRequest,
-        rejected: undefined
-      }
-    ]
+    // resolved: dispatchRequest 发请求
+    const chain: PromiseChain[] = [{ resolved: dispatchRequest, rejected: undefined }]
     // 将用户添加的请求拦截器加到数组中，等待执行
     // 请求拦截器是先添加的后执行，因此用 unshift
     this.interceptors.request.forEach(interceptor => {
@@ -75,12 +70,7 @@ export default class Axios {
   }
 
   _requestWithoutData(method: METHOD, url: string, config?: AxiosRequestConfig): AxiosPromise {
-    return this.request(
-      Object.assign(config || {}, {
-        method,
-        url
-      })
-    )
+    return this.request(Object.assign(config || {}, { method, url }))
   }
 
   _requestWithData(
@@ -89,13 +79,7 @@ export default class Axios {
     data: any,
     config?: AxiosRequestConfig
   ): AxiosPromise {
-    return this.request(
-      Object.assign(config || {}, {
-        method,
-        url,
-        data
-      })
-    )
+    return this.request(Object.assign(config || {}, { method, url, data }))
   }
 
   get(url: string, config?: AxiosRequestConfig): AxiosPromise {
@@ -119,5 +103,9 @@ export default class Axios {
   }
   patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise {
     return this._requestWithData('patch', url, data, config)
+  }
+
+  getUri(config?: AxiosRequestConfig): string {
+    return transformUrl(mergeConfig(this.defaults, config))
   }
 }

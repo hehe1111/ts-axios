@@ -274,6 +274,7 @@ app.use(
   - interceptor
   - config
   - cancel
-  - more: withCredentials/
+  - more: withCredentials/XSRF
+  - upload-download
 
 ### Jest

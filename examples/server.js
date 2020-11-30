@@ -120,11 +120,11 @@ function registerCancelRoutes() {
 
 function registerMoreRoutes() {
   router.get('/more/get', (req, res) => res.json(req.cookies))
-  router.post('/more/upload', function(req, res) {
+  router.post('/more/upload', (req, res) => {
     console.log(req.body, req.files)
     res.end('upload success!')
   })
-  router.post('/more/post', function(req, res) {
+  router.post('/more/post', (req, res) => {
     const auth = req.headers.authorization
     console.log('auth=', auth)
     const [type, credentials] = auth.split(' ')
@@ -133,5 +133,9 @@ function registerMoreRoutes() {
     type === 'Basic' && username === 'Bob' && password === '123456'
       ? res.json(req.body)
       : res.end('UnAuthorization')
+  })
+  router.get('/more/304', (req, res) => {
+    res.status(304)
+    res.end()
   })
 }

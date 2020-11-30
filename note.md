@@ -171,6 +171,90 @@ if (withCredentials) {
 }
 ```
 
+## XSRF/CSRF 防御
+
+### 防御手段
+
+- （1）验证请求的 `referer`：**不安全**，`referer` 是可以伪造的
+- （2）**服务器端要求每次请求都包含一个 token**，这个 token 不在前端生成，而是在用户每次访问站点的时候生成，并通过 `set-cookie` 的方式种到客户端，然后客户端发送请求的时候，从 `cookie` 中对应的字段读取出 token，然后添加到请求 `headers` 中。这样服务端就可以从请求 `headers` 中读取这个 token 并验证，由于这个 token 是很难伪造的，所以就能区分这个请求是否是用户正常发起的
+
+### 基于防御手段（2）的大致实现流程
+
+如果**同域**或 **`withCredential: true`** 则读取 cookie 中 `xsrfCookieName` 对应的 key 的值 C，然后以 `xsrfHeaderName` 对应作为 `header` 字段 key，C 作为值设置请求头
+
+`xsrfCookieName`：存储 token 的 `cookie` 名称
+
+`xsrfHeaderName`：请求 `headers` 中 token 对应的 `header` 名称
+
+- 判断是否同域或者 `withCredential: true`
+  - 同域名的判断主要利用了一个技巧，创建一个 `a` 标签的 DOM，然后设置 `href` 属性为传入的 `url`，然后可以直接获取该 DOM 的 `protocol`、`host`
+- cookie 的读取
+- 设置请求头 header
+
+## 上传和下载的进度监控
+
+### 上传和下载的进度监控原理
+
+> `xhr` 对象提供了一个 `progress` 事件，可以监听此事件对数据的下载进度做监控；另外，`xhr.uplaod` 对象也提供了 `progress` 事件，可以基于此对上传进度做监控
+
+`e.loaded` 已上传/已下载的量
+
+`e.total` 需要上传/下载的总量
+
+如果请求的数据是 `FormData` 类型，应该主动删除请求 `headers` 中的 `Content-Type` 字段，让浏览器自动根据请求数据设置 `Content-Type`
+
+实现上比较简单，就是传入两个函数（如果有），比较难的是如何**实现示例**
+
+```js
+onDownloadProgress && (xhr.onprogress = onDownloadProgress)
+onUploadProgress && (xhr.upload.onprogress = onUploadProgress)
+```
+
+### 上传文件
+
+- 前端
+
+```html
+<form role="form" class="form" onsubmit="return false;">
+  <input id="file" type="file" class="form-control" />
+  <button id="upload" type="button" class="btn btn-primary">Upload</button>
+</form>
+```
+
+`onsubmit="return false;"` 提交时阻止默认行为
+
+```js
+const uploadEl = document.getElementById('upload')
+uploadEl!.addEventListener('click', e => {
+  const data = new FormData()
+  const fileEl = document.getElementById('file') as HTMLInputElement
+  if (fileEl.files) {
+    data.append('file', fileEl.files[0])
+    instance.post('/more/upload', data)
+  }
+})
+```
+
+- 后端接收被上传的文件
+
+需要在 `server.js` 所在的目录下创建 `uploaded-file/` 目录，用于存放被上传的文件
+
+```js
+// server.js
+
+const express = require('express')
+const path = require('path')
+const multipart = require('connect-multiparty')
+
+const app = express()
+
+app.use(
+  multipart({
+    uploadDir: path.resolve(__dirname, 'uploaded-file')
+  })
+)
+```
+
 ## 测试
 
 ### express + webpack 多页面项目

@@ -255,6 +255,28 @@ app.use(
 )
 ```
 
+## HTTP 授权
+
+请求 header 会包含服务器用于验证用户代理身份的凭证，通常会在服务器返回 `401 Unauthorized` 状态码以及 `WWW-Authenticate` 消息头之后在后续请求中发送此消息头
+
+axios 允许在请求配置中配置 `auth` 属性，`auth` 是一个对象结构，包含 `username` 和 `password` 2 个属性。一旦用户在请求的时候配置这俩属性，axios 就会自动往 HTTP 的请求 header 中添加 `Authorization` 属性，它的值为 `Basic 加密串`。 这里的加密串是 `username:password` base64 加密后的结果
+
+## 自定义合法状态码
+
+## 自定义参数序列化
+
+[URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
+
+## baseURL
+
+## 静态方法扩展
+
+`axios.all`、`axios.spread`
+
+`axios.Axios`
+
+`axios.getUri`
+
 ## 测试
 
 ### express + webpack 多页面项目
@@ -274,7 +296,13 @@ app.use(
   - interceptor
   - config
   - cancel
-  - more: withCredentials/XSRF
-  - upload-download
+  - more-with-credential
+  - more-xsrf
+  - more-upload-download
+  - more-authorization
+  - more-status-code
+  - more-params-serialization
+  - more-base-url
+  - more-extend
 
 ### Jest

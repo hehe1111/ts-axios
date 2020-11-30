@@ -1,4 +1,4 @@
-import { isDate, isPlainObject } from './utils'
+import { isDate, isPlainObject, isURLSearchParams } from './utils'
 
 function encode(param: string): string {
   return encodeURIComponent(param)
@@ -11,43 +11,57 @@ function encode(param: string): string {
     .replace(/%5D/gi, ']')
 }
 
-export function buildUrl(url: string, params?: any): string {
+type IBuildUrl = {
+  url: string
+  params?: any
+  paramsSerializer?: (params: any) => string
+}
+export function buildUrl({ url, params, paramsSerializer }: IBuildUrl): string {
   if (!params) {
     return url
   }
 
-  const parts: string[] = []
+  let serializedParams
 
-  Object.keys(params).map(k => {
-    const v = params[k]
-    if (v === null || v === undefined) {
-      return
-    }
-    let values: any[] = []
-    if (Array.isArray(v)) {
-      values = v
-      k += '[]'
-    } else {
-      values = [v]
-    }
-    values.map(_v => {
-      if (isDate(_v)) {
-        _v = _v.toISOString()
-      } else if (isPlainObject(_v)) {
-        _v = JSON.stringify(_v)
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParams(params)) {
+    serializedParams = params.toString()
+  } else {
+    const parts: string[] = []
+
+    Object.keys(params).map(k => {
+      const v = params[k]
+      if (v === null || v === undefined) {
+        return
       }
-      parts.push(`${encode(k)}=${encode(_v)}`)
+      let values: any[] = []
+      if (Array.isArray(v)) {
+        values = v
+        k += '[]'
+      } else {
+        values = [v]
+      }
+      values.map(_v => {
+        if (isDate(_v)) {
+          _v = _v.toISOString()
+        } else if (isPlainObject(_v)) {
+          _v = JSON.stringify(_v)
+        }
+        parts.push(`${encode(k)}=${encode(_v)}`)
+      })
     })
-  })
 
-  const serializeParams = parts.join('&')
-  if (serializeParams) {
+    serializedParams = parts.join('&')
+  }
+
+  if (serializedParams) {
     const hashIndex = url.indexOf('#')
     if (hashIndex !== -1) {
       url = url.slice(0, hashIndex)
     }
 
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializeParams
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams
   }
 
   return url

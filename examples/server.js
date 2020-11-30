@@ -138,4 +138,5 @@ function registerMoreRoutes() {
     res.status(304)
     res.end()
   })
+  router.get('/more/params-serialization', (req, res) => res.json(req.url))
 }

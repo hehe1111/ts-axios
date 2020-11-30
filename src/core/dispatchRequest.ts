@@ -5,8 +5,8 @@ import flattenHeaders from '../helpers/flatternHeaders'
 import transform from './transform'
 
 const transformUrl = (config: AxiosRequestConfig): string => {
-  const { url, params } = config
-  return buildUrl(url!, params)
+  const { url, params, paramsSerializer } = config
+  return buildUrl({ url: url!, params, paramsSerializer })
 }
 
 const processConfig = (config: AxiosRequestConfig): void => {

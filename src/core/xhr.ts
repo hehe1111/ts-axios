@@ -21,83 +21,94 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       onDownloadProgress,
       onUploadProgress
     } = config
+
     const xhr = new XMLHttpRequest()
-
-    responseType && (xhr.responseType = responseType)
-
-    timeout && (xhr.timeout = timeout)
-
-    cancelToken &&
-      cancelToken.promise.then(reason => {
-        xhr.abort()
-        reject(reason)
-      })
-
-    withCredentials && (xhr.withCredentials = true)
-
-    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
-      const xsrfValue = cookie.read(xsrfCookieName)
-      xsrfValue && (headers[xsrfHeaderName!] = xsrfValue)
-    }
-
-    onDownloadProgress && (xhr.onprogress = onDownloadProgress)
-    onUploadProgress && (xhr.upload.onprogress = onUploadProgress)
-
     xhr.open(method.toUpperCase(), url!)
-
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState !== 4) {
-        return
-      }
-
-      if (xhr.status === 0) {
-        // 可能的场景
-        // 1. 网络错误
-        // 2. 超时
-        // ...
-        return
-      }
-
-      const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
-      // 注意根据 responseType 的不同，需要从不同的地方拿数据
-      const responseData = responseType && responseType === 'text' ? xhr.responseText : xhr.response
-      const response: AxiosResponse = {
-        data: responseData,
-        status: xhr.status,
-        statusText: xhr.statusText,
-        headers: responseHeaders,
-        config,
-        request: xhr
-      }
-
-      handleResponse(response)
-    }
-
-    xhr.onerror = () => {
-      console.log('onerror xhr.status=', xhr.status)
-      reject(createError('Network Error.', config, null, xhr))
-    }
-
-    xhr.ontimeout = () => {
-      console.log('ontimeout xhr.status=', xhr.status)
-      reject(createError(`Timeout of ${timeout}ms excceed.`, config, 'ECONNABORTED', xhr))
-    }
-
-    // 如果请求的数据是 FormData 类型，应该主动删除请求 headers 中的 Content-Type 字段，让浏览器自动根据请求数据设置 Content-Type
-    isFormData(data) && delete headers['Content-Type']
-    // 需要在执行过 open 方法后，才可以去处理 headers
-    Object.keys(headers).map(name => {
-      if (data === null && name.toLocaleLowerCase() === 'content-type') {
-        delete headers[name]
-      } else {
-        xhr.setRequestHeader(name, headers[name])
-      }
-    })
-
+    configureRequest()
+    handleCancel()
+    handleRequestHeaders()
+    addEevnts()
     xhr.send(data)
 
-    /* 工具函数 */
-    const handleResponse = (response: AxiosResponse): void => {
+    /* === 工具函数 === */
+
+    function configureRequest() {
+      responseType && (xhr.responseType = responseType)
+      timeout && (xhr.timeout = timeout)
+      withCredentials && (xhr.withCredentials = true)
+    }
+
+    function handleCancel() {
+      cancelToken &&
+        cancelToken.promise.then(reason => {
+          xhr.abort()
+          reject(reason)
+        })
+    }
+
+    function handleRequestHeaders() {
+      if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+        const xsrfValue = cookie.read(xsrfCookieName)
+        xsrfValue && (headers[xsrfHeaderName!] = xsrfValue)
+      }
+
+      // 如果请求的数据是 FormData 类型，应该主动删除请求 headers 中的 Content-Type 字段，让浏览器自动根据请求数据设置 Content-Type
+      isFormData(data) && delete headers['Content-Type']
+      // 需要在执行过 open 方法后，才可以去处理 headers
+      Object.keys(headers).map(name => {
+        if (data === null && name.toLocaleLowerCase() === 'content-type') {
+          delete headers[name]
+        } else {
+          xhr.setRequestHeader(name, headers[name])
+        }
+      })
+    }
+
+    function addEevnts() {
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) {
+          return
+        }
+
+        if (xhr.status === 0) {
+          // 可能的场景
+          // 1. 网络错误
+          // 2. 超时
+          // ...
+          return
+        }
+
+        const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
+        // 注意根据 responseType 的不同，需要从不同的地方拿数据
+        const responseData =
+          responseType && responseType === 'text' ? xhr.responseText : xhr.response
+        const response: AxiosResponse = {
+          data: responseData,
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: responseHeaders,
+          config,
+          request: xhr
+        }
+
+        handleResponse(response)
+      }
+
+      xhr.onerror = () => {
+        console.log('onerror xhr.status=', xhr.status)
+        reject(createError('Network Error.', config, null, xhr))
+      }
+
+      xhr.ontimeout = () => {
+        console.log('ontimeout xhr.status=', xhr.status)
+        reject(createError(`Timeout of ${timeout}ms excceed.`, config, 'ECONNABORTED', xhr))
+      }
+
+      onDownloadProgress && (xhr.onprogress = onDownloadProgress)
+      onUploadProgress && (xhr.upload.onprogress = onUploadProgress)
+    }
+
+    function handleResponse(response: AxiosResponse): void {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {

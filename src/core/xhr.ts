@@ -3,6 +3,7 @@ import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 import { isURLSameOrigin } from '../helpers/url'
 import cookie from '../helpers/cookie'
+import { isFormData } from '../helpers/utils'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {
   return new Promise((resolve, reject) => {
@@ -16,7 +17,9 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       cancelToken,
       withCredentials,
       xsrfCookieName,
-      xsrfHeaderName
+      xsrfHeaderName,
+      onDownloadProgress,
+      onUploadProgress
     } = config
     const xhr = new XMLHttpRequest()
 
@@ -36,6 +39,9 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       const xsrfValue = cookie.read(xsrfCookieName)
       xsrfValue && (headers[xsrfHeaderName!] = xsrfValue)
     }
+
+    onDownloadProgress && (xhr.onprogress = onDownloadProgress)
+    onUploadProgress && (xhr.upload.onprogress = onUploadProgress)
 
     xhr.open(method.toUpperCase(), url!)
 
@@ -77,6 +83,8 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       reject(createError(`Timeout of ${timeout}ms excceed.`, config, 'ECONNABORTED', xhr))
     }
 
+    // 如果请求的数据是 FormData 类型，应该主动删除请求 headers 中的 Content-Type 字段，让浏览器自动根据请求数据设置 Content-Type
+    isFormData(data) && delete headers['Content-Type']
     // 需要在执行过 open 方法后，才可以去处理 headers
     Object.keys(headers).map(name => {
       if (data === null && name.toLocaleLowerCase() === 'content-type') {

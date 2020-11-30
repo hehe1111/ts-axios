@@ -28,6 +28,8 @@ export interface AxiosRequestConfig {
   cancelToken?: CancelToken
   xsrfCookieName?: string
   xsrfHeaderName?: string
+  onDownloadProgress?: (event: ProgressEvent) => void
+  onUploadProgress?: (event: ProgressEvent) => void
 }
 
 export interface AxiosTransformer {

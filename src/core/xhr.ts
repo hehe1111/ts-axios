@@ -19,7 +19,8 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth
     } = config
 
     const xhr = new XMLHttpRequest()
@@ -36,6 +37,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       responseType && (xhr.responseType = responseType)
       timeout && (xhr.timeout = timeout)
       withCredentials && (xhr.withCredentials = true)
+      auth && (headers['Authorization'] = 'Basic ' + btoa(auth.username + ':' + auth.password))
     }
 
     function handleCancel() {

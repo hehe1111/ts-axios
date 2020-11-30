@@ -21,3 +21,12 @@ const instance = axios.create({
   xsrfHeaderName: 'X-XSRF-TOKEN-D'
 })
 instance.get('/more/get').then(res => console.log(res.config.headers))
+
+/* === HTTP 授权 === */
+
+axios
+  .post('/more/post', { a: 1 }, { auth: { username: 'Bob', password: '123456' } })
+  .then(res => console.log(res))
+axios
+  .post('/more/post', { a: 1 }, { auth: { username: 'Bob', password: '1234567' } })
+  .then(res => console.log(res))

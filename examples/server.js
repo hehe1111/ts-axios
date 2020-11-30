@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const path = require('path')
 const multipart = require('connect-multiparty')
+const atob = require('atob')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -122,5 +123,15 @@ function registerMoreRoutes() {
   router.post('/more/upload', function(req, res) {
     console.log(req.body, req.files)
     res.end('upload success!')
+  })
+  router.post('/more/post', function(req, res) {
+    const auth = req.headers.authorization
+    console.log('auth=', auth)
+    const [type, credentials] = auth.split(' ')
+    console.log('atob(credentials)=', atob(credentials))
+    const [username, password] = atob(credentials).split(':')
+    type === 'Basic' && username === 'Bob' && password === '123456'
+      ? res.json(req.body)
+      : res.end('UnAuthorization')
   })
 }

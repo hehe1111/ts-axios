@@ -26,7 +26,8 @@ export default function mergeConfig(
 }
 
 const mergeFor: { [key in keyof AxiosRequestConfig]: any } = {}
-;['url', 'params', 'data'].map(key => (mergeFor[key] = onlyFromConfig2))
+  // TODO: auth 是否应该放在 headers 所在的数组
+;['url', 'params', 'data', 'auth'].map(key => (mergeFor[key] = onlyFromConfig2))
 ;['headers'].map(key => (mergeFor[key] = deepMergeBoth))
 
 function onlyFromConfig2(value1: any, value2: any) {

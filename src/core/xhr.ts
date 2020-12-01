@@ -104,7 +104,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       xhr.ontimeout = () => {
         reject(
           createError({
-            message: `Timeout of ${timeout}ms excceed.`,
+            message: `Timeout of ${timeout}ms exceeded.`,
             config,
             code: 'ECONNABORTED',
             request: xhr

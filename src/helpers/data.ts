@@ -1,10 +1,7 @@
 import { isPlainObject } from './utils'
 
 export const stringifyData = (data: any): any => {
-  if (isPlainObject(data)) {
-    return JSON.stringify(data)
-  }
-  return data
+  return isPlainObject(data) ? JSON.stringify(data) : data
 }
 
 export const parseData = (data: any): any => {

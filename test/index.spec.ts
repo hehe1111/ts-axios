@@ -47,6 +47,7 @@ describe('requests', () => {
       expect(rejectSpy).toHaveBeenCalled()
       expect(reason instanceof Error).toBeTruthy()
       expect((reason as AxiosError).message).toBe('Network Error.')
+      // expect.any(XMLHttpRequest) 表示匹配任意由 constructor 创建的对象实例
       expect(reason.request).toEqual(expect.any(XMLHttpRequest))
 
       jasmine.Ajax.install()
@@ -267,11 +268,12 @@ describe('requests', () => {
     })
   })
 
-  test('should allow overriding Content-Type header case-insensitive', () => {
+  test('should allow overriding Content-Type header case-insensitive', done => {
     axios.post('/foo', { prop: 'value' }, { headers: { 'content-type': 'application/json' } })
 
     getAjaxRequest().then(request => {
       expect(request.requestHeaders['Content-Type']).toBe('application/json')
+      done()
     })
   })
 })

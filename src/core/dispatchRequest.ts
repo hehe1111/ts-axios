@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildUrl, combineURL, isAbsoluteURL } from '../helpers/url'
-import flattenHeaders from '../helpers/flatternHeaders'
+import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
 export default (config: AxiosRequestConfig): AxiosPromise => {

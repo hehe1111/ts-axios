@@ -1,4 +1,5 @@
-import { isPlainObject } from './utils'
+import { METHOD } from '../types/index'
+import { isPlainObject, deepMerge } from './utils'
 
 export const normalizeHeaders = (headers: any, normalizedName: string) => {
   if (!headers) {
@@ -37,16 +38,22 @@ export const parseHeaders = (headers: string): any => {
   }
 
   headers.split('\r\n').map(line => {
-    let [key, value] = line.split(':')
+    let [key, ...values] = line.split(':')
     key = key.trim().toLowerCase()
-    if (!key) {
-      return
-    }
-    if (value) {
-      value = value.trim()
-    }
-    result[key] = value
+    if (!key) return
+    result[key] = values.join(':').trim()
   })
 
   return result
+}
+
+export function flattenHeaders(headers: any, method: METHOD): any {
+  if (!headers) return headers
+
+  headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
+
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+  methodsToDelete.map(method => delete headers[method])
+
+  return headers
 }

@@ -98,13 +98,18 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       }
 
       xhr.onerror = () => {
-        console.log('onerror xhr.status=', xhr.status)
-        reject(createError('Network Error.', config, null, xhr))
+        reject(createError({ message: 'Network Error.', config, code: null, request: xhr }))
       }
 
       xhr.ontimeout = () => {
-        console.log('ontimeout xhr.status=', xhr.status)
-        reject(createError(`Timeout of ${timeout}ms excceed.`, config, 'ECONNABORTED', xhr))
+        reject(
+          createError({
+            message: `Timeout of ${timeout}ms excceed.`,
+            config,
+            code: 'ECONNABORTED',
+            request: xhr
+          })
+        )
       }
 
       onDownloadProgress && (xhr.onprogress = onDownloadProgress)
@@ -116,13 +121,13 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
         resolve(response)
       } else {
         reject(
-          createError(
-            `Request failed with status code ${response.status}`,
+          createError({
+            message: `Request failed with status code ${response.status}`,
             config,
-            null,
-            xhr,
+            code: null,
+            request: xhr,
             response
-          )
+          })
         )
       }
     }

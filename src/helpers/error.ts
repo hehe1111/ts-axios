@@ -2,24 +2,16 @@ import { AxiosRequestConfig, AxiosResponse } from '../types'
 
 export class AxiosError extends Error {
   isAxiosError: boolean
-  config: AxiosRequestConfig
-  code?: string | null
-  request?: XMLHttpRequest
-  response?: AxiosResponse
 
   constructor(
     message: string,
-    config: AxiosRequestConfig,
-    code?: string | null,
-    request?: XMLHttpRequest,
-    response?: AxiosResponse
+    public config: AxiosRequestConfig,
+    public code?: string | null,
+    public request?: XMLHttpRequest,
+    public response?: AxiosResponse
   ) {
     super(message)
 
-    this.config = config
-    this.code = code
-    this.request = request
-    this.response = response
     this.isAxiosError = true
 
     // 解决 TypeScript 继承一些内置对象的时候的坑
@@ -28,12 +20,19 @@ export class AxiosError extends Error {
   }
 }
 
-export const createError = (
-  message: string,
-  config: AxiosRequestConfig,
-  code?: string | null,
-  request?: XMLHttpRequest,
+type ICreateError = {
+  message: string
+  config: AxiosRequestConfig
+  code?: string | null
+  request?: XMLHttpRequest
   response?: AxiosResponse
-): AxiosError => {
+}
+export const createError = ({
+  message,
+  config,
+  code,
+  request,
+  response
+}: ICreateError): AxiosError => {
   return new AxiosError(message, config, code, request, response)
 }

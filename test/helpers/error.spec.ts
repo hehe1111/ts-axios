@@ -13,7 +13,7 @@ describe('src/helpers/error.ts', () => {
       config,
       request
     }
-    const error = createError('Boom!', config, 'SOME CODE', request, response)
+    const error = createError({ message: 'Boom!', config, code: 'SOME CODE', request, response })
     expect(error instanceof Error).toBeTruthy()
     expect(error instanceof AxiosError).toBeTruthy()
     expect(error.message).toBe('Boom!')

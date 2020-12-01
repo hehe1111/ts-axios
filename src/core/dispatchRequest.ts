@@ -7,7 +7,13 @@ import transform from './transform'
 export default (config: AxiosRequestConfig): AxiosPromise => {
   throwIfCancellationRequested(config)
   processConfig(config)
-  return xhr(config).then(res => _transformResponseData(res))
+  return xhr(config).then(
+    res => _transformResponseData(res),
+    error => {
+      error?.response && (error.response = _transformResponseData(error.response))
+      return Promise.reject(error)
+    }
+  )
 }
 
 /* === 工具函数 === */

@@ -8,7 +8,7 @@ import {
   isURLSearchParams
 } from '../../src/helpers/utils'
 
-describe('helpers:utils', () => {
+describe('src/helpers/utils.ts', () => {
   describe('getTypeOf', () => {
     test('null 返回 "null"', () => expect(getTypeOf(null)).toBe('null'))
     test('undefined 返回 "undefined"', () => expect(getTypeOf(undefined)).toBe('undefined'))

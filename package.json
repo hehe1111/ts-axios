@@ -1,27 +1,29 @@
 {
-  "name": "ts-axios",
+  "name": "ts-axios-20201202",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
-  "main": "dist/ts-axios.umd.js",
-  "module": "dist/ts-axios.es5.js",
-  "typings": "dist/types/ts-axios.d.ts",
+  "description": "Using TypeScript to implement axios. Just for study.",
+  "keywords": ["TypeScript", "axios", "HTTP"],
+  "main": "dist/axios.umd.js",
+  "module": "dist/axios.es5.js",
+  "typings": "dist/types/axios.d.ts",
   "files": [
     "dist"
   ],
-  "author": " <>",
+  "author": "hehe1111",
   "repository": {
     "type": "git",
     "url": ""
   },
   "license": "MIT",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts",
+    "prepub": "yarn run test:prod && yarn run build",
+    "pub": "sh release.sh",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage",
     "test:verbose": "jest --verbose --coverage",

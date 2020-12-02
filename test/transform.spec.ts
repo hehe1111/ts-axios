@@ -16,21 +16,21 @@ describe('src/core/transform.ts', () => {
     })
   })
 
-  xtest('should transform string to JSON', done => {
-    let response: AxiosResponse
+  // xtest('should transform string to JSON', done => {
+  //   let response: AxiosResponse
 
-    axios('/foo').then(_response => (response = _response))
+  //   axios('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: JSON.stringify(data) })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: JSON.stringify(data) })
 
-      setTimeout(() => {
-        expect(typeof response.data).toBe('object')
-        expect(response.data.foo).toBe('bar')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(typeof response.data).toBe('object')
+  //       expect(response.data.foo).toBe('bar')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should transform string to JSON', done => {
     axios('/foo').then((response: AxiosResponse) => {
       expect(typeof response.data).toBe('object')

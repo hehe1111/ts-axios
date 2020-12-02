@@ -56,24 +56,24 @@ describe('index', () => {
     }
   })
 
-  xtest('should reject when request timeout', done => {
-    let error: AxiosError
+  // xtest('should reject when request timeout', done => {
+  //   let error: AxiosError
 
-    axios('/foo', { timeout: 2000, method: 'post' }).catch(_error => {
-      error = _error
-    })
+  //   axios('/foo', { timeout: 2000, method: 'post' }).catch(_error => {
+  //     error = _error
+  //   })
 
-    getAjaxRequest().then(request => {
-      // @ts-ignore
-      request.eventBus.trigger('timeout')
+  //   getAjaxRequest().then(request => {
+  //     // @ts-ignore
+  //     request.eventBus.trigger('timeout')
 
-      setTimeout(() => {
-        expect(error instanceof Error).toBeTruthy()
-        expect(error.message).toBe('Timeout of 2000ms exceeded.')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(error instanceof Error).toBeTruthy()
+  //       expect(error.message).toBe('Timeout of 2000ms exceeded.')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should reject when request timeout', done => {
     axios('/foo', { timeout: 2000, method: 'post' }).catch((error: AxiosError) => {
       expect(error instanceof Error).toBeTruthy()
@@ -135,33 +135,33 @@ describe('index', () => {
     }
   })
 
-  xtest('should return JSON when resolved', done => {
-    let response: AxiosResponse
+  // xtest('should return JSON when resolved', done => {
+  //   let response: AxiosResponse
 
-    axios('/api/account/signup', {
-      auth: { username: '', password: '' },
-      method: 'post',
-      headers: { Accept: 'application/json' }
-    }).then(_response => {
-      response = _response
-      // console.log('=========')
-      // console.log(response.data) // { a: 1 }
-      // console.log('=========')
-    })
+  //   axios('/api/account/signup', {
+  //     auth: { username: '', password: '' },
+  //     method: 'post',
+  //     headers: { Accept: 'application/json' }
+  //   }).then(_response => {
+  //     response = _response
+  //     // console.log('=========')
+  //     // console.log(response.data) // { a: 1 }
+  //     // console.log('=========')
+  //   })
 
-    getAjaxRequest().then(request => {
-      request.respondWith({
-        status: 200,
-        statusText: 'OK',
-        responseText: '{"a": 1}'
-      })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({
+  //       status: 200,
+  //       statusText: 'OK',
+  //       responseText: '{"a": 1}'
+  //     })
 
-      setTimeout(() => {
-        expect(response.data).toEqual({ a: 1 })
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toEqual({ a: 1 })
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should return JSON when resolved', done => {
     axios('/api/account/signup', {
       auth: { username: '', password: '' },
@@ -181,30 +181,30 @@ describe('index', () => {
     })
   })
 
-  xtest('should return JSON when rejecting', done => {
-    let response: AxiosResponse
+  // xtest('should return JSON when rejecting', done => {
+  //   let response: AxiosResponse
 
-    axios('/api/account/signup', {
-      auth: { username: '', password: '' },
-      method: 'post',
-      headers: { Accept: 'application/json' }
-    }).catch(error => (response = error.response))
+  //   axios('/api/account/signup', {
+  //     auth: { username: '', password: '' },
+  //     method: 'post',
+  //     headers: { Accept: 'application/json' }
+  //   }).catch(error => (response = error.response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({
-        status: 400,
-        statusText: 'Bad Request',
-        responseText: '{"error": "BAD USERNAME", "code": 1}'
-      })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({
+  //       status: 400,
+  //       statusText: 'Bad Request',
+  //       responseText: '{"error": "BAD USERNAME", "code": 1}'
+  //     })
 
-      setTimeout(() => {
-        expect(typeof response.data).toBe('object')
-        expect(response.data.error).toBe('BAD USERNAME')
-        expect(response.data.code).toBe(1)
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(typeof response.data).toBe('object')
+  //       expect(response.data.error).toBe('BAD USERNAME')
+  //       expect(response.data.code).toBe(1)
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should return JSON when rejecting', done => {
     axios('/api/account/signup', {
       auth: { username: '', password: '' },
@@ -227,28 +227,28 @@ describe('index', () => {
     })
   })
 
-  xtest('should supply correct response', done => {
-    let response: AxiosResponse
+  // xtest('should supply correct response', done => {
+  //   let response: AxiosResponse
 
-    axios.post('/foo').then(res => (response = res))
+  //   axios.post('/foo').then(res => (response = res))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({
-        status: 200,
-        statusText: 'OK',
-        responseText: '{"foo": "bar"}',
-        responseHeaders: { 'Content-Type': 'application/json' }
-      })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({
+  //       status: 200,
+  //       statusText: 'OK',
+  //       responseText: '{"foo": "bar"}',
+  //       responseHeaders: { 'Content-Type': 'application/json' }
+  //     })
 
-      setTimeout(() => {
-        expect(response.status).toBe(200)
-        expect(response.statusText).toBe('OK')
-        expect(response.data.foo).toBe('bar')
-        expect(response.headers['content-type']).toBe('application/json')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.status).toBe(200)
+  //       expect(response.statusText).toBe('OK')
+  //       expect(response.data.foo).toBe('bar')
+  //       expect(response.headers['content-type']).toBe('application/json')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should supply correct response', done => {
     axios.post('/foo').then((response: AxiosResponse) => {
       expect(response.status).toBe(200)
@@ -277,30 +277,30 @@ describe('index', () => {
     })
   })
 
-  xtest('should support array buffer response', done => {
-    let response: AxiosResponse
+  // xtest('should support array buffer response', done => {
+  //   let response: AxiosResponse
 
-    axios('/foo', { responseType: 'arraybuffer' }).then(_response => (response = _response))
+  //   axios('/foo', { responseType: 'arraybuffer' }).then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      // @ts-ignore
-      request.respondWith({ status: 200, response: str2ab('Hello world') })
+  //   getAjaxRequest().then(request => {
+  //     // @ts-ignore
+  //     request.respondWith({ status: 200, response: str2ab('Hello world') })
 
-      setTimeout(() => {
-        expect(response.data.byteLength).toBe(22)
-        done()
-      }, 100)
-    })
+  //     setTimeout(() => {
+  //       expect(response.data.byteLength).toBe(22)
+  //       done()
+  //     }, 100)
+  //   })
 
-    function str2ab(str: string) {
-      const buff = new ArrayBuffer(str.length * 2)
-      const view = new Uint16Array(buff)
-      for (let i = 0; i < str.length; i++) {
-        view[i] = str.charCodeAt(i)
-      }
-      return buff
-    }
-  })
+  //   function str2ab(str: string) {
+  //     const buff = new ArrayBuffer(str.length * 2)
+  //     const view = new Uint16Array(buff)
+  //     for (let i = 0; i < str.length; i++) {
+  //       view[i] = str.charCodeAt(i)
+  //     }
+  //     return buff
+  //   }
+  // })
   test('should support array buffer response', done => {
     const string = 'Hello world'
     axios('/foo', { responseType: 'arraybuffer' }).then((response: AxiosResponse) => {

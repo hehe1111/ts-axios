@@ -79,26 +79,26 @@ describe('interceptors', () => {
     })
   })
 
-  xtest('should add a response interceptor', done => {
-    let response: AxiosResponse
-    const instance = axios.create()
+  // xtest('should add a response interceptor', done => {
+  //   let response: AxiosResponse
+  //   const instance = axios.create()
 
-    instance.interceptors.response.use(response => {
-      response.data = response.data + ' - modified by interceptor'
-      return response
-    })
+  //   instance.interceptors.response.use(response => {
+  //     response.data = response.data + ' - modified by interceptor'
+  //     return response
+  //   })
 
-    instance('/foo').then(_response => (response = _response))
+  //   instance('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: 'OK' })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: 'OK' })
 
-      setTimeout(() => {
-        expect(response.data).toBe('OK - modified by interceptor')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toBe('OK - modified by interceptor')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should add a response interceptor', done => {
     const instance = axios.create()
 
@@ -117,37 +117,37 @@ describe('interceptors', () => {
     })
   })
 
-  xtest('should add a response interceptor that returns a new data object', done => {
-    let response: AxiosResponse
-    const instance = axios.create()
+  // xtest('should add a response interceptor that returns a new data object', done => {
+  //   let response: AxiosResponse
+  //   const instance = axios.create()
 
-    instance.interceptors.response.use(_response => {
-      return {
-        data: 'stuff',
-        headers: null,
-        status: 500,
-        statusText: 'ERR',
-        request: _response.request,
-        config: {}
-      }
-    })
+  //   instance.interceptors.response.use(_response => {
+  //     return {
+  //       data: 'stuff',
+  //       headers: null,
+  //       status: 500,
+  //       statusText: 'ERR',
+  //       request: _response.request,
+  //       config: {}
+  //     }
+  //   })
 
-    instance('/foo').then(_response => (response = _response))
+  //   instance('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: 'OK' })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: 'OK' })
 
-      setTimeout(() => {
-        expect(response.data).toBe('stuff')
-        expect(response.headers).toBeNull()
-        expect(response.status).toBe(500)
-        expect(response.statusText).toBe('ERR')
-        expect(response.request).toEqual(expect.any(XMLHttpRequest))
-        expect(response.config).toEqual({})
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toBe('stuff')
+  //       expect(response.headers).toBeNull()
+  //       expect(response.status).toBe(500)
+  //       expect(response.statusText).toBe('ERR')
+  //       expect(response.request).toEqual(expect.any(XMLHttpRequest))
+  //       expect(response.config).toEqual({})
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should add a response interceptor that returns a new data object', done => {
     const instance = axios.create()
 
@@ -177,31 +177,31 @@ describe('interceptors', () => {
     })
   })
 
-  xtest('should add a response interceptor that returns a promise', done => {
-    let response: AxiosResponse
-    const instance = axios.create()
+  // xtest('should add a response interceptor that returns a promise', done => {
+  //   let response: AxiosResponse
+  //   const instance = axios.create()
 
-    instance.interceptors.response.use(_response => {
-      return new Promise(resolve => {
-        // do something async
-        setTimeout(() => {
-          _response.data = 'you have been promised!'
-          resolve(_response)
-        }, 10)
-      })
-    })
+  //   instance.interceptors.response.use(_response => {
+  //     return new Promise(resolve => {
+  //       // do something async
+  //       setTimeout(() => {
+  //         _response.data = 'you have been promised!'
+  //         resolve(_response)
+  //       }, 10)
+  //     })
+  //   })
 
-    instance('/foo').then(_response => (response = _response))
+  //   instance('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: 'OK' })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: 'OK' })
 
-      setTimeout(() => {
-        expect(response.data).toBe('you have been promised!')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toBe('you have been promised!')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should add a response interceptor that returns a promise', done => {
     const instance = axios.create()
     instance.interceptors.response.use(_response => {
@@ -224,34 +224,34 @@ describe('interceptors', () => {
     })
   })
 
-  xtest('should add multiple response interceptors', done => {
-    let response: AxiosResponse
-    const instance = axios.create()
+  // xtest('should add multiple response interceptors', done => {
+  //   let response: AxiosResponse
+  //   const instance = axios.create()
 
-    instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '1'
-      return _response
-    })
-    instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '2'
-      return _response
-    })
-    instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '3'
-      return _response
-    })
+  //   instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '1'
+  //     return _response
+  //   })
+  //   instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '2'
+  //     return _response
+  //   })
+  //   instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '3'
+  //     return _response
+  //   })
 
-    instance('/foo').then(_response => (response = _response))
+  //   instance('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: 'OK' })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: 'OK' })
 
-      setTimeout(() => {
-        expect(response.data).toBe('OK123')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toBe('OK123')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should add multiple response interceptors', done => {
     const instance = axios.create()
 
@@ -278,37 +278,37 @@ describe('interceptors', () => {
     })
   })
 
-  xtest('should allow removing interceptors', done => {
-    let response: AxiosResponse
-    let intercept
-    const instance = axios.create()
+  // xtest('should allow removing interceptors', done => {
+  //   let response: AxiosResponse
+  //   let intercept
+  //   const instance = axios.create()
 
-    instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '1'
-      return _response
-    })
-    intercept = instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '2'
-      return _response
-    })
-    instance.interceptors.response.use(_response => {
-      _response.data = _response.data + '3'
-      return _response
-    })
+  //   instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '1'
+  //     return _response
+  //   })
+  //   intercept = instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '2'
+  //     return _response
+  //   })
+  //   instance.interceptors.response.use(_response => {
+  //     _response.data = _response.data + '3'
+  //     return _response
+  //   })
 
-    instance.interceptors.response.eject(intercept)
+  //   instance.interceptors.response.eject(intercept)
 
-    instance('/foo').then(_response => (response = _response))
+  //   instance('/foo').then(_response => (response = _response))
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200, responseText: 'OK' })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200, responseText: 'OK' })
 
-      setTimeout(() => {
-        expect(response.data).toBe('OK13')
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.data).toBe('OK13')
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should allow removing interceptors', done => {
     let intercept: number
     const instance = axios.create()

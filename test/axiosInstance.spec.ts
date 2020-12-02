@@ -111,34 +111,34 @@ describe('axiosInstance', () => {
     expect(typeof instance.defaults.headers.common).toBe('object')
   })
 
-  xtest('should have interceptors on the instance', done => {
-    axios.interceptors.request.use(config => {
-      config.timeout = 2000
-      return config
-    })
+  // xtest('should have interceptors on the instance', done => {
+  //   axios.interceptors.request.use(config => {
+  //     config.timeout = 2000
+  //     return config
+  //   })
 
-    const instance = axios.create()
+  //   const instance = axios.create()
 
-    instance.interceptors.request.use(config => {
-      config.withCredentials = true
-      return config
-    })
+  //   instance.interceptors.request.use(config => {
+  //     config.withCredentials = true
+  //     return config
+  //   })
 
-    let response: AxiosResponse
-    instance.get('/foo').then(_response => {
-      response = _response
-    })
+  //   let response: AxiosResponse
+  //   instance.get('/foo').then(_response => {
+  //     response = _response
+  //   })
 
-    getAjaxRequest().then(request => {
-      request.respondWith({ status: 200 })
+  //   getAjaxRequest().then(request => {
+  //     request.respondWith({ status: 200 })
 
-      setTimeout(() => {
-        expect(response.config.timeout).toEqual(0)
-        expect(response.config.withCredentials).toEqual(true)
-        done()
-      }, 100)
-    })
-  })
+  //     setTimeout(() => {
+  //       expect(response.config.timeout).toEqual(0)
+  //       expect(response.config.withCredentials).toEqual(true)
+  //       done()
+  //     }, 100)
+  //   })
+  // })
   test('should have interceptors on the instance', done => {
     axios.interceptors.request.use(config => {
       config.timeout = 2000

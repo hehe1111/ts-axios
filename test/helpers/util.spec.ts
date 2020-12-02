@@ -95,10 +95,10 @@ describe('src/helpers/utils.ts', () => {
       const b: any = { foo: 123 }
       const c: any = { bar: 456 }
       const d = deepMerge(a, b, c)
-      expect(typeof a.foo).toBe('undefined')
-      expect(typeof a.bar).toBe('undefined')
-      expect(typeof b.bar).toBe('undefined')
-      expect(typeof c.foo).toBe('undefined')
+      expect(a.foo).toBeUndefined()
+      expect(a.bar).toBeUndefined()
+      expect(b.bar).toBeUndefined()
+      expect(c.foo).toBeUndefined()
       expect(d.foo).toBe(123)
       expect(d.bar).toBe(456)
 

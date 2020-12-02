@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from '../src/index'
 import { getAjaxRequest } from './utils'
 
-describe('requests', () => {
+describe('index', () => {
   beforeEach(() => jasmine.Ajax.install())
 
   afterEach(() => jasmine.Ajax.uninstall())

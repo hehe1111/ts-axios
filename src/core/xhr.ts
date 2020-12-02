@@ -11,7 +11,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       url,
       method = 'get',
       data,
-      headers,
+      headers = {},
       responseType,
       timeout,
       cancelToken,

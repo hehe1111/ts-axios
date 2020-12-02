@@ -401,7 +401,7 @@ fi
 
 `set -e` 告诉脚本如果执行结果不为 `true` 则退出
 
-`read VERSION` 表示从标准输入读取值，并赋值给 `$VERSION` 变量。此处输入的值会自动同步到 `package.json` 中的 `version` 字段。
+`read VERSION` 表示从标准输入读取值，并赋值给 `$VERSION` 变量
 
 `read -p "Releasing $VERSION - are you sure? (y/n)" -n 1 -r`，其中 `read -p` 表示给出提示符，后面接着 `Releasing $VERSION - are you sure? (y/n)` 提示符；`-n 1` 表示限定**最多可以有 1 个字符可以作为有效读入**；`-r` 表示**禁止反斜线的转义功能**。因为此处的 `read` 并没有指定变量名，那么默认这个输入读取值会赋值给 `$REPLY` 变量
 

@@ -5,6 +5,48 @@
 - [typescript library starter](https://github.com/alexjoverm/typescript-library-starter)
   - TypeScript, RollupJS, Jest, Prettier, TSLint, Semantic Release, TypeDoc, Commitizen, husky, Conventional changelog
 
+## tsconfig
+
+```json
+{
+  // https://www.typescriptlang.org/docs/handbook/compiler-options.html
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es5",
+    "module": "es2015",
+    "lib": ["es2015", "es2016", "es2017", "dom"],
+    "strict": true,
+    // 启用 --strict 相当于启用
+    // --noImplicitAny
+    // --noImplicitThis
+    // --alwaysStrict
+    // --strictNullChecks
+    // --strictFunctionTypes
+    // --strictPropertyInitialization
+    "sourceMap": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declarationDir": "dist/types",
+    "outDir": "dist/lib",
+    "typeRoots": ["node_modules/@types"]
+
+    // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+    // "removeComments": true,
+
+    // 解决「无法重新声明块范围变量」的提示报错
+    // https://www.cnblogs.com/libinfs/p/11857187.html
+    // "target": "esnext",
+    // "module": "commonjs",
+    // "noImplicitReturns": true,
+    // "noUnusedLocals": true,
+    // "esModuleInterop": true
+  },
+  "include": ["src"]
+}
+```
+
 ## HTTP 基础
 
 - 请求时，查询参数会被转成字符串形式追加到 url 上。**`params` 对象里如果含有数组、Date 对象、JSON 对象、特殊字符时，需要做特殊处理**。如果是空值，则需要丢弃
@@ -306,3 +348,75 @@ axios 允许在请求配置中配置 `auth` 属性，`auth` 是一个对象结�
   - more-extend
 
 ### Jest
+
+- `describe('描述', () => {/* 测试用例 */})`
+- 测试用例：`test('描述', () => {/* 测试语句 */})`
+  - **`test` 函数别名 `it`**
+- 测试语句：
+  - `expect(/*...*/).toEqual()` 比较两个值是否相等（对于嵌套对象会进行递归比较）
+  - `expect(/*...*/).toBe()` 使用严格相等进行比较。不要用于「浮点数」
+  - `expect(/*...*/).not.toBe()`
+  - `expect(/*...*/).toBeNull()`
+  - `expect(/*...*/).toBeUndefined()`
+  - `expect(/*...*/).toBeTruthy()`
+  - `expect(/*...*/).toBeFalsy()`
+  - `expect(/* instance */).toBeInstanceOf(/* constructor */)`
+  - `fail()`
+  - `done.fail()`
+- `/* istanbul ignore next */` 主要用途就是用来**忽略测试**用的，这个技巧不可滥用，除非明确的知道某段代码不需要测试，否则不应该使用它。滥用就失去了单元测试的意义了。
+
+### jasmine-ajax
+
+会为发出的 Ajax 请求根据规范**定义一组假的响应**，并跟踪发出的 Ajax 请求，可以方便的为结果做断言
+
+## 发布
+
+`npm view [<@scope>/]<pkg>[@<version>]` 搜索一个包名是否已经存在
+
+`release.sh`
+
+```sh
+#!/usr/bin/env sh
+set -e
+echo "Enter release version: "
+read VERSION
+read -p "Releasing $VERSION - are you sure? (y/n)" -n 1 -r
+echo  # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+  echo "Releasing $VERSION ..."
+
+  # commit
+  git add -A
+  git commit -m "[build] $VERSION"
+  npm version $VERSION --message "[release] $VERSION"
+  git push origin master
+
+  # publish
+  npm publish
+fi
+```
+
+`#!/usr/bin/env sh` 用来表示是一个 shell 脚本
+
+`set -e` 告诉脚本如果执行结果不为 `true` 则退出
+
+`read VERSION` 表示从标准输入读取值，并赋值给 `$VERSION` 变量
+
+`read -p "Releasing $VERSION - are you sure? (y/n)" -n 1 -r`，其中 `read -p` 表示给出提示符，后面接着 `Releasing $VERSION - are you sure? (y/n)` 提示符；`-n 1` 表示限定**最多可以有 1 个字符可以作为有效读入**；`-r` 表示**禁止反斜线的转义功能**。因为此处的 `read` 并没有指定变量名，那么默认这个输入读取值会赋值给 `$REPLY` 变量
+
+`if [[ $REPLY =~ ^[Yy]$ ]]` 表示 shell 脚本中的流程控制语句，判断 `$REPLY` 是不是大小写的 `y`，如果满足，则走到后面的 `then` 逻辑。
+
+- `package.json`
+
+```jsonc
+{
+  "files": ["dist"], // 要发布到 npm 上的文件和目录
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src"
+  }
+}
+```
+
+`preXXX` 的命令默认会在 `XXX` 命令之前执行

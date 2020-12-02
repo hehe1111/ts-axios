@@ -1,5 +1,9 @@
 # ts-axios
 
+TypeScript/Rollup/Jest/Express/Webpack
+
+## 开发
+
 安装依赖
 
 ```bash
@@ -44,7 +48,7 @@ yarn run test:verbose
 
 ## 测试
 
-- `examples/`：express + webpack
+- `examples/`：Express + Webpack
 - `test/`：Jest
 
 ## 其他

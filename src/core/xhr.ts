@@ -44,10 +44,18 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
 
     function handleCancel() {
       cancelToken &&
-        cancelToken.promise.then(reason => {
-          xhr.abort()
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            xhr.abort()
+            reject(reason)
+          })
+          .catch(
+            /* istanbul ignore next */
+            () => {
+              // do nothing
+              // 其实不写 catch 也可以通过 tslint
+            }
+          )
     }
 
     function handleRequestHeaders() {

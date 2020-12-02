@@ -1,18 +1,10 @@
 {
-  // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es5",
     "module": "es2015",
     "lib": ["es2015", "es2016", "es2017", "dom"],
     "strict": true,
-    // 启用 --strict 相当于启用
-    // --noImplicitAny
-    // --noImplicitThis
-    // --alwaysStrict
-    // --strictNullChecks
-    // --strictFunctionTypes
-    // --strictPropertyInitialization
     "sourceMap": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
@@ -20,18 +12,7 @@
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "typeRoots": ["node_modules/@types"],
-
-    // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
-    // "removeComments": true,
-
-    // 解决「无法重新声明块范围变量」的提示报错
-    // https://www.cnblogs.com/libinfs/p/11857187.html
-    // "target": "esnext",
-    // "module": "commonjs",
-    // "noImplicitReturns": true,
-    // "noUnusedLocals": true,
-    // "esModuleInterop": true
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"]
 }

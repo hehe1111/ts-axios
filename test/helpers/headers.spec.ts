@@ -1,6 +1,6 @@
 import { contentTypeJson, parseHeaders, flattenHeaders } from '../../src/helpers/headers'
 
-describe('helpers:header', () => {
+describe('src/helpers/header.ts', () => {
   describe('parseHeaders', () => {
     test('should parse headers', () => {
       const parsed = parseHeaders(

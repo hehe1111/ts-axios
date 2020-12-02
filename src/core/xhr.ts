@@ -9,7 +9,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
   return new Promise((resolve, reject) => {
     const {
       url,
-      method = 'get',
+      method,
       data,
       headers = {},
       responseType,
@@ -25,7 +25,8 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
     } = config
 
     const xhr = new XMLHttpRequest()
-    xhr.open(method.toUpperCase(), url!)
+    // 默认配置中 method 默认为 get
+    xhr.open(method!.toUpperCase(), url!)
     configureRequest()
     handleCancel()
     handleRequestHeaders()
@@ -85,7 +86,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
         const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
         // 注意根据 responseType 的不同，需要从不同的地方拿数据
         const responseData =
-          responseType && responseType === 'text' ? xhr.responseText : xhr.response
+          responseType && responseType !== 'text' ? xhr.response : xhr.responseText
         const response: AxiosResponse = {
           data: responseData,
           status: xhr.status,

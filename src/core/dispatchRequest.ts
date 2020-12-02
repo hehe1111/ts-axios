@@ -10,7 +10,7 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
   return xhr(config).then(
     res => _transformResponseData(res),
     error => {
-      error?.response && (error.response = _transformResponseData(error.response))
+      error.response && (error.response = _transformResponseData(error.response))
       return Promise.reject(error)
     }
   )

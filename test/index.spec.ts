@@ -276,4 +276,50 @@ describe('index', () => {
       done()
     })
   })
+
+  xtest('should support array buffer response', done => {
+    let response: AxiosResponse
+
+    axios('/foo', { responseType: 'arraybuffer' }).then(_response => (response = _response))
+
+    getAjaxRequest().then(request => {
+      // @ts-ignore
+      request.respondWith({ status: 200, response: str2ab('Hello world') })
+
+      setTimeout(() => {
+        expect(response.data.byteLength).toBe(22)
+        done()
+      }, 100)
+    })
+
+    function str2ab(str: string) {
+      const buff = new ArrayBuffer(str.length * 2)
+      const view = new Uint16Array(buff)
+      for (let i = 0; i < str.length; i++) {
+        view[i] = str.charCodeAt(i)
+      }
+      return buff
+    }
+  })
+  test('should support array buffer response', done => {
+    const string = 'Hello world'
+    axios('/foo', { responseType: 'arraybuffer' }).then((response: AxiosResponse) => {
+      expect(response.data.byteLength).toBe(string.length * 2)
+      done()
+    })
+
+    getAjaxRequest().then(request => {
+      // @ts-ignore
+      request.respondWith({ status: 200, response: str2ab(string) })
+    })
+
+    function str2ab(str: string) {
+      const buff = new ArrayBuffer(str.length * 2)
+      const view = new Uint16Array(buff)
+      for (let i = 0; i < str.length; i++) {
+        view[i] = str.charCodeAt(i)
+      }
+      return buff
+    }
+  })
 })

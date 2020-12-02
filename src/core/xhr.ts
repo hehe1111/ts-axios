@@ -58,8 +58,9 @@ export default (config: AxiosRequestConfig): AxiosPromise => {
       // 如果请求的数据是 FormData 类型，应该主动删除请求 headers 中的 Content-Type 字段，让浏览器自动根据请求数据设置 Content-Type
       isFormData(data) && delete headers['Content-Type']
       // 需要在执行过 open 方法后，才可以去处理 headers
+      // 如果没有 data，则删除 Content-Type
       Object.keys(headers).map(name => {
-        if (data === null && name.toLocaleLowerCase() === 'content-type') {
+        if ((data === undefined || data === null) && name.toLocaleLowerCase() === 'content-type') {
           delete headers[name]
         } else {
           xhr.setRequestHeader(name, headers[name])

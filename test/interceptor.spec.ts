@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from '../src/index'
-import { getAjaxRequest } from './utils'
+import { getAjaxRequest } from './utils/index'
 
 describe('interceptors', () => {
   beforeEach(() => jasmine.Ajax.install())

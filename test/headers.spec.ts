@@ -1,7 +1,7 @@
 /* 从业务角度测试 headers 的相关业务逻辑 */
 
 import axios from '../src/index'
-import { getAjaxRequest } from './utils'
+import { getAjaxRequest } from './utils/index'
 
 describe('headers', () => {
   beforeEach(() => jasmine.Ajax.install())

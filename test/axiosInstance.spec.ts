@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from '../src/index'
-import { getAjaxRequest } from './utils'
+import { getAjaxRequest } from './utils/index'
 
-describe('instance', () => {
+describe('axiosInstance', () => {
   beforeEach(() => jasmine.Ajax.install())
 
   afterEach(() => jasmine.Ajax.uninstall())

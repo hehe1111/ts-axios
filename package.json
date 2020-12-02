@@ -1,6 +1,6 @@
 {
   "name": "@hehe1111/ts-axios",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Using TypeScript to implement axios. Just for study.",
   "keywords": [
     "TypeScript",

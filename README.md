@@ -7,23 +7,23 @@ TypeScript/Rollup/Jest/Express/Webpack
 安装依赖
 
 ```bash
-yarn
+npm install
 ```
 
 运行 `examples/`
 
 ```bash
-yarn run dev
+npm run dev
 ```
 
 运行 `test/`
 
 ```bash
 # 只展示测试覆盖率
-yarn run test
+npm run test
 
 # 展示每个测试的描述 + 测试覆盖率
-yarn run test:verbose
+npm run test:verbose
 ```
 
 ## 功能

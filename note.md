@@ -407,6 +407,14 @@ fi
 
 `if [[ $REPLY =~ ^[Yy]$ ]]` 表示 shell 脚本中的流程控制语句，判断 `$REPLY` 是不是大小写的 `y`，如果满足，则走到后面的 `then` 逻辑。
 
+`git commit -m "[build] $VERSION"` 提交后，查看 git commit 历史时，会发现 commit 上自动打了 tag
+
+举例
+
+```
+* ef4a47a - (tag: v0.0.1, origin/master) [release] 0.0.1 (11 minutes ago) <hehe1111>
+```
+
 - `package.json`
 
 ```jsonc

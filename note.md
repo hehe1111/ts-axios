@@ -7,7 +7,7 @@
 
 ## tsconfig
 
-```json
+```jsonc
 {
   // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {

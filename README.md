@@ -1,5 +1,10 @@
 # ts-axios
 
+![GitHub top language](https://img.shields.io/github/languages/top/hehe1111/ts-axios)
+![GitHub](https://img.shields.io/github/license/hehe1111/ts-axios)
+![Travis (.org)](https://img.shields.io/travis/hehe1111/ts-axios)
+![npm (scoped)](https://img.shields.io/npm/v/@hehe1111/ts-axios)
+
 TypeScript/Rollup/Jest/Express/Webpack
 
 ## 开发

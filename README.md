@@ -59,6 +59,7 @@ npm run test:verbose
 ## 其他
 
 - [笔记](./note.md)
+- [笔记2](./note2.md)
 
 ## 参考链接
 

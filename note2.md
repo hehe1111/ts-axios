@@ -361,3 +361,7 @@ if (onUploadProgress) {
 - 使用了 `const handler = jest.fn(callback)` 去模拟了一个函数，利用 `handler` 来断言该函数是否被调用过，调用过多少次，调用时传了哪些参数
 - 测试请求：伪造响应
 - 异步测试
+
+# 引用关系
+
+![](./note2-01.png)

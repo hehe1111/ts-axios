@@ -54,6 +54,16 @@ const instance = Axios.prototype.request.bind(context)
 extend(instance, context)
 ```
 
+调用 `axios()` 实际上就是在调用 `axios.request()`
+
+调用 `axios.get/post/...()` 等其实也是在调用 `axios.request()`
+
+`axios.request` 中会去构造链式调用链，其中会去调用 `dispatchRequest` 函数
+
+`dispatchRequest` 函数会去调用 `xhr` 函数
+
+`xhr` 函数会去调用 `new XMLHttpRequest()`
+
 - axios 函数重载
 - 响应数据支持泛型
 

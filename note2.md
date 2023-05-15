@@ -128,6 +128,25 @@ export default class Axios {
 
 拦截器对象的 `resolve`/`reject` 函数可以是同步函数，也可以是异步函数。无论哪种情况，都会被 `promise.then` 包裹成 `Promise` 对象，从而实现链式调用
 
+## axios 的实现
+
+> https://github.com/axios/axios/blob/v1.x/lib/core/Axios.js 看 `request` 函数的实现
+
+1）axios 的拦截器数组是打平的，是一维数组，形如：`[resolve1, reject1, resolve2, reject2, resolve3, reject3, ...]`。**偶数下标为 `resolve`，奇数下标为 `reject`**
+2）用一个变量 `i = 0`，记录当前遍历到的拦截器数组下标，每次都要同时取两个拦截器，分别对应 `resolve`、`reject`
+
+```js
+const l = chain.length
+while (i < l) {
+  promise = promise.then(chain[i++], chain[i++])
+}
+```
+
+相比上面的实现，axios 实现的优点：
+
+1）打平数组，不需要创建额外的空间来存放每个拦截器的 `resolve`、`reject`
+2）用一个变量来记录遍历到的拦截器数组下标，而不是通过 `shift` 函数来获取，拦截器数组不存在变动，操作性能更优
+
 # ts-axios 配置化实现
 
 - 提供默认配置
@@ -287,7 +306,7 @@ source.cancel('Operation canceled by the user.');
   - A 的代码发起的请求会走 A 的 axios 处理，也就是会有 CSRF 防御，请求头 headers 会带有 token 信息。
   - 用户 U 登录 A 后，再去访问 B，**B 想让用户 U 去访问 A，应该是只能通过构造完整的 A 路径如：https://a-site.com/path/to/a/page/ 让用户 U 去访问。这个请求会直接发起，不会走 A 的 axios 处理，因为不是 A 的代码发起的请求，请求头里也就不会有 token 信息**。
 
-通过名字直接读取某个 cookie
+通过名字直接读取某个 cookie，以下也是 `axios` 的官方实现（https://github.com/axios/axios/blob/v1.x/lib/helpers/cookies.js）
 
 ```js
 const cookie = {
@@ -375,3 +394,23 @@ if (onUploadProgress) {
 # 引用关系
 
 ![](./note2-01.png)
+
+# axios 的官方实现
+
+对应本仓库的 `core/*`
+
+https://github.com/axios/axios/blob/v1.x/lib/core/Axios.js
+https://github.com/axios/axios/blob/v1.x/lib/core/dispatchRequest.js
+https://github.com/axios/axios/blob/v1.x/lib/core/InterceptorManager.js
+https://github.com/axios/axios/blob/v1.x/lib/core/mergeConfig.js
+https://github.com/axios/axios/blob/v1.x/lib/core/transformData.js
+https://github.com/axios/axios/blob/v1.x/lib/adapters/xhr.js 看默认导出函数
+
+`src/axiosInstance.js` -> https://github.com/axios/axios/blob/v1.x/lib/axios.js
+
+`src/defaults.js` -> https://github.com/axios/axios/blob/v1.x/lib/defaults/index.js
+
+https://github.com/axios/axios/blob/v1.x/lib/helpers/buildURL.js
+https://github.com/axios/axios/blob/v1.x/lib/helpers/combineURLs.js
+https://github.com/axios/axios/blob/v1.x/lib/helpers/isURLSameOrigin.js
+https://github.com/axios/axios/blob/v1.x/lib/helpers/isAbsoluteURL.js
